@@ -21,25 +21,30 @@ func usersRoutes(router *http.ServeMux, userController controllers.UserControlle
 	router.Handle("GET /users",
 		manager.MiddlewareChain(
 			http.HandlerFunc(userController.GetAllUsers),
+			middleware.AuthMiddleware,
 		))
 
 	router.Handle("GET /users/{id}",
 		manager.MiddlewareChain(
 			http.HandlerFunc(userController.GetUserById),
+			middleware.AuthMiddleware,
 		))
 
 	router.Handle("GET /users/email/{email}",
 		manager.MiddlewareChain(
 			http.HandlerFunc(userController.GetUserByEmail),
+			middleware.AuthMiddleware,
 		))
 
 	router.Handle("PUT /users/{id}",
 		manager.MiddlewareChain(
 			http.HandlerFunc(userController.UpdateUsers),
+			middleware.AuthMiddleware,
 		))
 		
 	router.Handle("DELETE /users/{id}",
 		manager.MiddlewareChain(
 			http.HandlerFunc(userController.DeleteUsers),
+			middleware.AuthMiddleware,
 		))
 }

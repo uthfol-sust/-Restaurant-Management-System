@@ -14,9 +14,10 @@ type MyCustomClaims struct {
 	Role string
 	jwt.RegisteredClaims
 }
-var secret_key = config.LocalConfig.JWTSecret
+
 
 func GenerateToken(u_Id int, u_Name, u_Role string) (string, error) {
+	secret_key := config.LocalConfig.JWTSecret
 
 	claims := MyCustomClaims{
 		ID:   u_Id,
@@ -24,7 +25,7 @@ func GenerateToken(u_Id int, u_Name, u_Role string) (string, error) {
 		Role: u_Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "MyTaskManager",
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(5 * time.Minute)),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -33,6 +34,8 @@ func GenerateToken(u_Id int, u_Name, u_Role string) (string, error) {
 }
 
 func VerifyByJWT(tokenString string) (string, error) {
+	secret_key := config.LocalConfig.JWTSecret
+	
 	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return []byte(secret_key), nil
 	})

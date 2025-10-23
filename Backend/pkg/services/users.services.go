@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"restaurant-system/pkg/models"
 	"restaurant-system/pkg/repositories"
 	"restaurant-system/pkg/utils"
@@ -21,7 +22,7 @@ type userService struct {
 	userRepo repositories.UserRepository
 }
 
-func NewUserService(repo repositories.UserRepository) UserServices {
+func NewUserService(repo repositories.UserRepository) *userService {
 	return &userService{userRepo: repo}
 }
 
@@ -40,7 +41,7 @@ func (s *userService) Login(email, password string) (*models.User, error) {
 	userExit, err := s.userRepo.GetByEmail(email)
 
 	if userExit == nil || err != nil {
-		return nil, errors.New("Sorry!Your are tring with Inavild email")
+		return nil, errors.New("internal server error or invalid email or password")
 	}
 
 	if !utils.CheckPassword(userExit.Password, password) {
@@ -55,7 +56,17 @@ func (s *userService) GetAll() ([]models.User, error) {
 }
 
 func (s *userService) GetUserById(id int) (*models.User, error) {
-	return s.userRepo.GetByID(id)
+	user, err := s.userRepo.GetByID(id)
+
+	if err != nil {
+		return nil, fmt.Errorf("database error: %v", err)
+	}
+
+	if user == nil {
+		return nil, errors.New("user not found")
+	}
+
+	return user, nil
 }
 
 func (s *userService) GetUserByEmail(email string) (*models.User, error) {
@@ -96,10 +107,10 @@ func (s *userService) UpdateUser(req_id int, updateUser *models.User) (*models.U
 }
 
 func (s *userService) DeleteUser(id int) error {
-    user, _ := s.userRepo.GetByID(id)
-    if user ==nil{
+	user, _ := s.userRepo.GetByID(id)
+	if user == nil {
 		return errors.New("this user not Exit")
 	}
 
-    return s.userRepo.Delete(id)
+	return s.userRepo.Delete(id)
 }

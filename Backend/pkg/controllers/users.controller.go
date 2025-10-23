@@ -25,16 +25,11 @@ type userController struct {
 	userService services.UserServices
 }
 
-func NewUserController(userServices services.UserServices) UserController {
+func NewUserController(userServices services.UserServices) *userController {
 	return &userController{userService: userServices}
 }
 
 func (c *userController) CreateUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	user := &models.User{}
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&user); err != nil {
@@ -62,12 +57,30 @@ func (c *userController) Login(w http.ResponseWriter, r *http.Request) {
 	user := &LoginInput{}
 	utils.ParseBody(r, user)
 
-	isExit, err := c.userService.Login(user.Email, user.Password)
-	if err != nil {
+	isUser, err := c.userService.Login(user.Email, user.Password)
+	if err != nil || isUser==nil{
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
 	}
 
-	utils.HTTPResponse(w, 200, isExit)
+
+	token , _ := utils.GenerateToken(isUser.ID, isUser.Name,isUser.Role)
+
+	http.SetCookie(w ,&http.Cookie{
+		Name: "jwt",
+		Value: token,
+		Path: "/",
+		HttpOnly: true,
+		Secure: false,
+		SameSite: http.SameSiteStrictMode,
+	})
+	
+	w.Header().Set("Content-Type", "application/json")
+	
+	json.NewEncoder(w).Encode(map[string]string{
+	"token": token,
+	"massage":"\nLogin successful! JWT set in cookie",
+    })
 }
 
 func (c *userController) GetAllUsers(w http.ResponseWriter, r *http.Request) {

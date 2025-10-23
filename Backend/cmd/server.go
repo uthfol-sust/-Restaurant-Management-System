@@ -22,11 +22,20 @@ func Serve() {
 	migrations.Migrate(db)
 
 	mux := http.NewServeMux()
+	
 	userRepo := repositories.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
-	userController := controllers.NewUserController(userService)
+	productRepo := repositories.NewProductRepository(db)
 
-	routers.RootRoutes(mux,userController)
+	userService := services.NewUserService(userRepo)
+	productService := services.NewProductService(productRepo)
+
+
+	userController := controllers.NewUserController(userService)
+	productController := controllers.NewProductController(productService)
+
+	
+
+	routers.RootRoutes(mux,userController, productController )
 
 	fmt.Println("Sever Runnig on Port 8080")
 	http.ListenAndServe(":8080", mux)

@@ -18,7 +18,7 @@ type userRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) UserRepository {
+func NewUserRepository(db *sql.DB) *userRepository {
 	return &userRepository{
 		db: db,
 	}
@@ -45,9 +45,9 @@ func (r *userRepository) GetAll() ([]models.User, error) {
 }
 
 func (r *userRepository) GetByID(id int) (*models.User, error) {
-	query := "SELECT id, name, email, password FROM users WHERE id = ?"
+	query := "SELECT id, name, email, password, role , IFNULL(phone_no, '') FROM users WHERE id = ?"
 	user := &models.User{}
-	err := r.db.QueryRow(query, id).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
+	err := r.db.QueryRow(query, id).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Role, &user.PhoneNo)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -57,10 +57,10 @@ func (r *userRepository) GetByID(id int) (*models.User, error) {
 	return user, nil
 }
 
-func (r * userRepository) GetByEmail(email string)(*models.User, error){
-	query := "SELECT id, name, email, password FROM users WHERE email = ?"
+func (r *userRepository) GetByEmail(email string) (*models.User, error) {
+	query := "SELECT id, name, email, password , role, IFNULL(phone_no, '') FROM users WHERE email = ?"
 	user := &models.User{}
-	err := r.db.QueryRow(query,email).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
+	err := r.db.QueryRow(query, email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Role, &user.PhoneNo)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -71,8 +71,8 @@ func (r * userRepository) GetByEmail(email string)(*models.User, error){
 }
 
 func (r *userRepository) Create(user *models.User) error {
-	query := "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"
-	result, err := r.db.Exec(query, user.Name, user.Email, user.Password)
+	query := "INSERT INTO users (name, email, password,role, phone_no, shift_time) VALUES (?, ?, ?,?,?,?)"
+	result, err := r.db.Exec(query, user.Name, user.Email, user.Password,user.Role,user.PhoneNo,user.ShiftTime)
 	if err != nil {
 		return err
 	}
@@ -84,11 +84,11 @@ func (r *userRepository) Create(user *models.User) error {
 	return nil
 }
 
-func (r *userRepository) Update(user *models.User)  error {
+func (r *userRepository) Update(user *models.User) error {
 	query := "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?"
-    _, err := r.db.Exec(query, user.Name, user.Email, user.Password, user.ID)
-	
-	return  err
+	_, err := r.db.Exec(query, user.Name, user.Email, user.Password, user.ID)
+
+	return err
 }
 
 func (r *userRepository) Delete(id int) error {
