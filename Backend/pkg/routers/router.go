@@ -6,10 +6,12 @@ import (
 	"restaurant-system/pkg/middleware"
 )
 
-func RootRoutes(router *http.ServeMux, usersCon controllers.UserController, productsCon controllers.ProductController ) {
+func RootRoutes(router *http.ServeMux, usersCon controllers.UserController, productsCon controllers.ProductController , inventories controllers.InventoryController ) {
 	mngr := &middleware.Manager{}
 	mngr.Use(middleware.CorsMiddleware)
 
 	usersRoutes(router, usersCon, mngr)
-	productRoutes(router, productsCon, mngr )
+	productRoutes(router, productsCon, mngr)
+	inventoryRoutes(router , inventories, mngr)
+
 }
