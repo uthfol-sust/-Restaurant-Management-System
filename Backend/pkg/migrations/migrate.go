@@ -30,6 +30,7 @@ func Migrate(db *sql.DB) error {
 		log.Fatalf("Failed to create users table: %v", err)
 	}
 
+
 	ProductTable := `CREATE TABLE IF NOT EXISTS products(
 	    product_id INT PRIMARY KEY,
 		product_name VARCHAR(100) NOT NULL,
@@ -42,6 +43,8 @@ func Migrate(db *sql.DB) error {
 	if err != nil{
 		log.Fatalf("Failed to create product table: %v", err)
 	}
+
+
 
     InventoryTable := `CREATE TABLE IF NOT EXISTS inventory (
 		id INT PRIMARY KEY,
@@ -56,6 +59,26 @@ func Migrate(db *sql.DB) error {
 	if err != nil {
 		log.Fatalf("❌ Failed to create inventory table: %v", err)
 	}
+
+
+
+	invent_pro := `CREATE TABLE IF NOT EXISTS inventory_product (
+    product_id INT,
+    id INT,
+    quantity_required INT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (id) REFERENCES inventory(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+    );`
+	 
+	_, err = db.Exec(invent_pro)
+	if err != nil {
+		log.Fatalf("❌ Failed to create inventory_product table: %v", err)
+	}
+
 
 	log.Println("✅ Database migration completed successfully!")
 	return nil
