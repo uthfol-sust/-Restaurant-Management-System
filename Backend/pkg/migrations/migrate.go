@@ -63,20 +63,33 @@ func Migrate(db *sql.DB) error {
 
 
 	invent_pro := `CREATE TABLE IF NOT EXISTS inventory_product (
-    product_id INT,
-    id INT,
-    quantity_required INT NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY (id) REFERENCES inventory(id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-    );`
+						product_id INT,
+						id INT,
+						quantity_required INT NOT NULL,
+						FOREIGN KEY (product_id) REFERENCES products(product_id)
+							ON UPDATE CASCADE
+							ON DELETE CASCADE,
+						FOREIGN KEY (id) REFERENCES inventory(id)
+							ON UPDATE CASCADE
+							ON DELETE CASCADE
+					);`
 	 
 	_, err = db.Exec(invent_pro)
 	if err != nil {
 		log.Fatalf("❌ Failed to create inventory_product table: %v", err)
+	}
+
+	supplier := `CREATE TABLE IF NOT EXISTS suppliers (
+					supplier_id INT PRIMARY KEY,
+					name VARCHAR(100) NOT NULL,
+					contact_no VARCHAR(20),
+					email VARCHAR(100),
+					address TEXT
+				);`
+	
+	_, err = db.Exec(supplier)
+	if err != nil {
+		log.Fatalf("❌ Failed to create supplier table: %v", err)
 	}
 
 

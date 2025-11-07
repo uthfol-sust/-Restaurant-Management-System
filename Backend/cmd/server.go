@@ -27,21 +27,24 @@ func Serve() {
 	productRepo := repositories.NewProductRepository(db)
 	inventoryRepo := repositories.NewInventoryRepository(db)
 	inventoryProductRepo := repositories.NewInventoryProductRepo(db)
+	supplierRepo:= repositories.NewSupplierRepository(db)
 
 	userService := services.NewUserService(userRepo)
 	productService := services.NewProductService(productRepo)
 	inventoryService := services.NewInventoryService(inventoryRepo)
 	inventoryProductService := services.NewInventoryProductService(inventoryProductRepo)
+	supplierService := services.NewSupplierService(supplierRepo)
 
 
 	userController := controllers.NewUserController(userService)
 	productController := controllers.NewProductController(productService)
     inventoryController := controllers.NewInventoryController(inventoryService)
 	inventoryProductController := controllers.NewInventoryProductController(inventoryProductService)
+	supplierController:= controllers.NewSupplierController(supplierService)
 
 	
 
-	routers.RootRoutes(mux,userController, productController, inventoryController,inventoryProductController)
+	routers.RootRoutes(mux,userController, productController, inventoryController,inventoryProductController,supplierController)
 
 	fmt.Println("Sever Runnig on Port 8080")
 	http.ListenAndServe(":8080", mux)
