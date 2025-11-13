@@ -19,7 +19,7 @@ func InventoryProductRoutes(router *http.ServeMux, controllers controllers.Inven
 			middleware.AuthMiddleware,
 		))
 
-	router.Handle("PUT /inventoryProducts/id",
+	router.Handle("PUT /inventoryProducts/{id}",
 		manager.MiddlewareChain(
 			http.HandlerFunc(controllers.UpdateInventoryProduct),
 			middleware.AuthMiddleware,

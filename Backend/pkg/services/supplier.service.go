@@ -50,6 +50,9 @@ func (s *supplierService) UpdateSupplier(id int64, supplier *models.Supplier) (*
 	supplier.ID = int64(id)
 
 	supp, err := s.supplierRepo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
 
 	if supplier.Name != "" {
 		supp.Name = supplier.Name

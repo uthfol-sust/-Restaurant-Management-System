@@ -76,7 +76,10 @@ func (s *userService) GetUserByEmail(email string) (*models.User, error) {
 func (s *userService) UpdateUser(req_id int, updateUser *models.User) (*models.User, error) {
 	updateUser.ID = req_id
 
-	curUser, _ := s.userRepo.GetByID(updateUser.ID)
+	curUser, err := s.userRepo.GetByID(req_id)
+    if err != nil || curUser==nil{
+		return nil, errors.New("inavild user id")
+	}
 
 	if updateUser.Name != "" {
 		curUser.Name = updateUser.Name
@@ -103,7 +106,11 @@ func (s *userService) UpdateUser(req_id int, updateUser *models.User) (*models.U
 		curUser.ShiftTime = updateUser.ShiftTime
 	}
 
-	return curUser, s.userRepo.Update(curUser)
+	err = s.userRepo.Update(curUser)
+    if err != nil{
+		return nil, errors.New("failed to update")
+	}
+	return  curUser , nil
 }
 
 func (s *userService) DeleteUser(id int) error {
