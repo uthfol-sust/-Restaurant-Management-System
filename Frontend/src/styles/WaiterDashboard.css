@@ -1,0 +1,50 @@
+.dashboard {
+    margin-top: 100px;
+    padding: 20px 6%;
+}
+
+.dashboard h2 {
+    color: #111;
+    margin-bottom: 24px;
+}
+
+.cards-container {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(6px);
+    padding: 20px;
+    flex: 1 1 250px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon {
+    font-size: 2rem;
+    color: #ba1010;
+}
+
+.card-content h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.card-content p {
+    margin: 4px 0 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
