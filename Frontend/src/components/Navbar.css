@@ -1,0 +1,30 @@
+.navbar {
+    width: 100%;
+    padding: 16px 6%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.nav-links a {
+    color: #fff;
+    margin-left: 24px;
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #ffcc33;
+}
