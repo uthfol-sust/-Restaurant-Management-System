@@ -185,4 +185,4 @@ The server bootstrap calls the migrations runner (Backend/pkg/migrations). On st
 - Middleware (logging, auth, CORS) is centralized under `pkg/middleware`.
 - Add a `.env.example` file with required environment variable names to help other developers get started.
 
--
+
