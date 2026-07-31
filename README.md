@@ -185,28 +185,4 @@ The server bootstrap calls the migrations runner (Backend/pkg/migrations). On st
 - Middleware (logging, auth, CORS) is centralized under `pkg/middleware`.
 - Add a `.env.example` file with required environment variable names to help other developers get started.
 
----
-
-## Contributing
-- Fork the repo, create a feature branch, make changes, add tests where appropriate, and open a pull request against the main branch.
-- Describe your changes clearly and reference any related issue.
-- Suggestion: add API documentation (Swagger/OpenAPI) and add integration tests for controllers.
-
----
-
-## Troubleshooting
-- If the backend fails to connect to the DB, check the `.env` variables and confirm the DB server is accepting connections.
-- If CORS issues appear during frontend-backend integration, either configure CORS in the backend middleware or use Vite proxy in `vite.config.js` to forward API requests to the backend during development.
-
----
-
-## License & contact
-- No license file detected in the repository root. Add a LICENSE file (e.g., MIT) if you want to make the project open source.
-- For questions or help, open an issue in this repository or contact the maintainers.
-
----
-
-If you want, I can:
-- produce a ready-to-add `README.md` file formatted exactly for the repo root,
-- generate a `.env.example` with likely environment keys,
-- or add a short API reference by extracting actual route paths from Backend/pkg/routers.
+-
