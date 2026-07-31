@@ -38,10 +38,11 @@ A simple full-stack Restaurant Management System with a Go backend and a React +
 - Frameworks / runtime:
   - Backend: Go HTTP server (net/http) with project-structured packages
   - Frontend: React + Vite
-- Notable libraries (inferred from repo layout):
-  - godotenv (env file loading)
-  - Vite (frontend dev server/build)
-  - ESLint for frontend linting
+    
+## Libraries and Tools
+- godotenv for environment variable loading
+- Vite for frontend development and builds
+- ESLint for frontend code quality
 
 ---
 
